@@ -12,7 +12,7 @@ library(knitr)
 library(scales)
 library(ggthemes)
 donor <- read_csv('https://raw.githubusercontent.com/gbearden/r_course_evans_school/master/data/small_donations_data.csv')
-elections <- read_csv('CountyElection.csv')
+elections <- read_csv('https://github.com/nbennett4025/datascienceinr/raw/master/CountyElection.csv')
 ```
 ```{r table, echo=FALSE, results='asis'}
 elections %>%
