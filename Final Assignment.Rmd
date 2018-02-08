@@ -1,0 +1,32 @@
+---
+title: "Does the Distribution of Donations Match the Political Persuation of a City?"
+author: "Nathaniel Bennett"
+fontsize: 11pt
+output: pdf_document
+---
+While a majority of Washington residents are Democrats, there is a strong minority of Republicans. The political divide in the state is often reflected in the geography of the state. The question remains whether this geographic divide between Republicans and Democrats holds true donations to races in those counties. Below is a table showing the 2016 Presidential results in three large counties in Washington.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(knitr)
+library(scales)
+library(ggthemes)
+donor <- read_csv('https://raw.githubusercontent.com/gbearden/r_course_evans_school/master/data/small_donations_data.csv')
+elections <- read_csv('CountyElection.csv')
+```
+```{r table, echo=FALSE, results='asis'}
+elections %>%
+  kable(format = 'markdown', caption = 'Election Results By County')
+```
+
+
+```{r plot, echo=FALSE}
+donor%>%
+  filter(jurisdiction_county %in% c('PIERCE', 'KING', 'SPOKANE'),party %in% c('DEMOCRAT', 'REPUBLICAN'))%>%
+  group_by(jurisdiction_county)%>%
+  mutate(
+    percentoftotal=amount/sum(amount))%>%
+  group_by(jurisdiction_county,party)%>%
+  ggplot(aes(jurisdiction_county,percentoftotal,fill=party)) + geom_bar(stat='identity') + labs(y='% of Total Donations', x='County', title='Donation Breakdown by Party in Three Washington Counties')+scale_y_continuous(labels = percent)+theme_classic()
+```
+As the graph shows, In King and Spokane counties the percentage of donations going to Democrats and Republicans roughly matches the 2016 presidential election results, but in Pierce county donations to Republicans greatly outstrip what would be expected from the 2016 election results.
